@@ -1,4 +1,3 @@
-import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -15,6 +14,8 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { Link } from "react-router-dom";
+import { CurrentUserStore } from "../../hooks/auth";
+import React, { useContext } from "react";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -59,7 +60,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  const { userState, userDispatch } = useContext(CurrentUserStore);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -80,6 +81,13 @@ const Header = () => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleLogout = () => {
+    userDispatch({
+      type: "REMOVE_USER",
+    });
+    window.location.reload()
+  };
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -97,10 +105,28 @@ const Header = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>
-        <Link to="/login">Login</Link>
-      </MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      {!userState.currentUser && (
+        <MenuItem onClick={handleMenuClose}>
+          <Link to="/login">Login</Link>
+        </MenuItem>
+      )}
+
+      {userState.currentUser && (
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      )}
+
+      {userState.currentUser?.name &&
+        userState.currentUser?.role == "client" && (
+          <MenuItem>
+            <Link to="/clients">Profile</Link>
+          </MenuItem>
+        )}
+      {userState.currentUser?.name &&
+        userState.currentUser?.role == "freelancer" && (
+          <MenuItem>
+            <Link to="/freelancer">Profile</Link>
+          </MenuItem>
+        )}
     </Menu>
   );
 
@@ -160,14 +186,13 @@ const Header = () => {
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static" className="main-header">
           <Toolbar>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ display: { xs: "none", sm: "block" } }}
-            >
-              MUI
-            </Typography>
+            <Link to="/">
+              <img
+                style={{ width: "150px", height: "60px" }}
+                src="/logo.png"
+                alt=""
+              />
+            </Link>
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />
@@ -178,6 +203,7 @@ const Header = () => {
               />
             </Search>
             <Box sx={{ flexGrow: 1 }} />
+            <Typography>{userState.currentUser?.name}</Typography>
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <IconButton
                 size="large"

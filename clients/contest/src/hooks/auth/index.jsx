@@ -17,16 +17,12 @@ const reducer = (state, action) => {
         ...state,
         currentUser: action.payload,
       };
-    case "ADD_TOKEN":
-      return {
-        ...state,
-        token: action.payload,
-      };
-    case "REMOVE_TOKEN":
-      return {
-        ...state,
-        token: "",
-      };
+      case "REMOVE_USER":
+        localStorage.removeItem("user")
+        return {
+          ...state,
+          currentUser: " ",
+        };
     default:
       return state;
   }

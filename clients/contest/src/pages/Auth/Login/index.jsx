@@ -1,12 +1,19 @@
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { Container } from "@mui/system";
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import { CurrentUserStore } from "../../../hooks/auth";
 import api from "../../../service/api";
 
 const Login = () => {
   const navigate = useNavigate();
+  const {userState, userDispatch} = useContext(CurrentUserStore)
+  const { search } = useLocation();
+  const redirectUrl = new URLSearchParams(search).get("redirect");
+  // const redirect = redirectUrl ? redirectUrl : "/";
+
+
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
@@ -19,10 +26,19 @@ const Login = () => {
     };
     try {
       let res = await api.post("/login", body);
+      userDispatch({
+        type:"ADD_USER",
+        payload: res.data
+      })
       localStorage.setItem("user", JSON.stringify(res.data));
-      if (res.data?.role == "freelancer") {
-        navigate("/clients");
-      }
+      if (redirectUrl) {
+        navigate(redirectUrl);
+      }else{
+        navigate("/");
+     }
+
+
+
     } catch (error) {
       toast(error.response?.data?.message, {
         position: "bottom-center",
@@ -36,6 +52,13 @@ const Login = () => {
       });
     }
   };
+
+
+
+
+
+
+
 
   return (
     <Container>

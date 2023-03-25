@@ -23,8 +23,7 @@ body {
   width: 100%;
   box-sizing: border-box;
   display: block;
-  padding-left: 50px;
-  padding-right: 50px;
+  padding: 10px 50px;
   display: flex;
   align-items: center;
   min-height: 56px;
@@ -40,7 +39,7 @@ body {
 
 .main_content {
   color: var(--text);
-  padding: 80px 50px;
+  padding: 120px 50px;
 }
 
 .MuiPaper-root.main-header {
@@ -268,4 +267,73 @@ body {
   margin-top: 15px;
   display: flex;
   gap: 15px;
+}
+.contest-details-body{
+  margin-top: 80px;
+  border: var(--border);
+  width: 100%;
+  height: 80vh;
+  padding: 35px;
+  border-radius: var(--border-radius);
+  position: relative;
+
+}
+.contest-details-header{
+  box-sizing: border-box;
+}
+a{
+  text-decoration: none;
+}
+.contest-details-body h1 {
+  color: #f1f1f1;
+  text-align: center;
+  padding-bottom: 50px;
+  text-decoration: 1px solid wavy;
+}
+.action-btn{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 35px;
+  display: flex;
+  gap: 20px;
+}
+
+.upload-preview{
+  width: 550px;
+  height: 350px;
+}
+#preview{
+  width: 100%;
+  height:100%
+
+}
+.sc-hLseeU{
+  color: var(--text-white)!important;
+  font-size: 14px!important;
+  margin-left: 20px;
+}
+.contest-cards{
+  display: flex;
+  gap: 20px;
+}
+.contest-card{
+  margin-top: 30px;
+  width: 33%;
+  height: 350px;
+  background: var(--bg-dark-blue);
+  border: var(--border);
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.contest-card img {
+  height: 200px;
+}
+.card-actions{
+  display: flex;
 }
