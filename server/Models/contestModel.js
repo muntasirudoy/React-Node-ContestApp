@@ -2,32 +2,39 @@ const mongoose = require("mongoose");
 
 const contestSchema = new mongoose.Schema({
   contestCreatorId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
-  },
-  contestCreatorName: {
-    type: String,
-    required: true,
+    ref: 'User' // reference to the User collection
   },
   contestTitle: {
     type: String,
-    required: true,
+    required: true
+  },
+
+  contestCreatorName: {
+    type: String,
   },
   contestDetails: {
     type: String,
-    required: true,
+    required: true
   },
   budget: {
     type: Number,
-    required: true,
+    required: true
   },
   contestTags: {
-    type: String,
+    type: [String]
   },
-  dadeline: {
+  deadline: {
+    type: Date
+  },
+  createdAt: {
     type: Date,
+    default: Date.now(),
   },
-  entries: [],
+  entries: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Entries' // reference to the Entry collection
+  }]
 });
-
-module.exports = mongoose.model("contest", contestSchema);
+module.exports = mongoose.model("Contest", contestSchema);
